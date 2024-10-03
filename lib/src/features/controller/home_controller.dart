@@ -15,6 +15,7 @@ class HomeController extends GetxController{
     super.onInit();
      getDeviceToken();
     PushNotificationService.requestNotificationPermission();
+
   }
 
   getDeviceToken()async{
@@ -50,9 +51,9 @@ class HomeController extends GetxController{
     );
 
     if(response.statusCode==200){
-      print("Notification send successfully!");
+      kPrint("Notification send successfully!");
     }else{
-      print("Notification send Filed! : ${response.statusCode}");
+      kPrint("Notification send Filed! : ${response.statusCode}");
     }
 
   }
