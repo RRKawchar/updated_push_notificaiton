@@ -3,15 +3,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:push_notification_check/src/core/service/local_notification_service.dart';
 import 'package:push_notification_check/src/core/service/push_notification_service.dart';
 import 'package:push_notification_check/src/features/home/view/pages/home_page.dart';
 
-// Initialize the FlutterLocalNotificationsPlugin
- final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
+
+@pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (kDebugMode) {
     print("Handling a background message: ${message.messageId}");
@@ -19,7 +18,10 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     print('Message notification: ${message.notification?.title}');
     print('Message notification: ${message.notification?.body}');
   }
+  LocalNotificationService.showNotification(message.notification!);
 }
+
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,62 +36,21 @@ void main() async {
   ):
   await Firebase.initializeApp();
 
+  LocalNotificationService.initializeLocalNotifications();
 
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  PushNotificationService.requestNotificationPermission();
 
-  NotificationSettings settings = await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
+  if (Platform.isIOS) {
+    await PushNotificationService.setForegroundIosMessageOptions();
+  }
 
-  // initializeNotifications();
-  LocalNotificationService.initializeNotifications();
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Got a message whilst in the foreground!');
-    print('Message data: ${message.data}');
+  await PushNotificationService.setupInteractMessage();
 
-    if (message.notification != null) {
-      print('Message also contained a notification: ${message.notification}');
-      showNotification(message.notification!);
-    }
-  });
-
-  // FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message){
-  //   print('Got a message whilst in the foreground!');
-  //   print('Message data: ${message.data}');
-  //
-  //   if (message.notification != null) {
-  //     print('Message also contained a notification: ${message.notification}');
-  //     showNotification(message.notification!);
-  //   }
-  // });
-
+   PushNotificationService.firebaseInitNotification();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
-
-// Show notification using flutter_local_notifications when app is in foreground
-void showNotification(RemoteNotification notification) async {
-  const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-    'channel_id', 'channel_name',
-    importance: Importance.max,
-    priority: Priority.high,
-  );
-  const NotificationDetails platformDetails = NotificationDetails(android: androidDetails);
-  await flutterLocalNotificationsPlugin.show(
-    0,
-    notification.title,
-    notification.body,
-    platformDetails,
-  );
-}
-
 
 
 class MyApp extends StatelessWidget {

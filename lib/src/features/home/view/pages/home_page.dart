@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:push_notification_check/src/features/controller/home_controller.dart';
+import 'package:push_notification_check/src/features/home/controller/home_controller.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});

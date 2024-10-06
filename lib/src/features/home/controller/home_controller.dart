@@ -15,12 +15,18 @@ class HomeController extends GetxController{
     super.onInit();
      getDeviceToken();
     PushNotificationService.requestNotificationPermission();
+    getAccessToken();
 
   }
 
   getDeviceToken()async{
    token.value=await TokenService.getDeviceToken();
    kPrint("The Device Token :: ${token.value}");
+  }
+
+  getAccessToken()async{
+    final String accessToken = await TokenService.getAccessToken();
+    kPrint("Get Access Token for bearer token: $accessToken");
   }
 
   Future<void> sendNotification()async {
