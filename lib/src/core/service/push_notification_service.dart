@@ -19,13 +19,13 @@ class PushNotificationService {
           /// This showNotification Method is very important to show notification...
 
           // LocalNotificationService.showNotification(message.notification!);
-          LocalNotificationService.handleForegroundNotification(message);
-
-
+            LocalNotificationService.handleForegroundNotification(message);
         }
       },
     );
   }
+
+
 
   static Future<void> setupInteractMessage() async {
     await FirebaseMessaging.instance.setAutoInitEnabled(true);
@@ -36,24 +36,30 @@ class PushNotificationService {
     if (initializeMessage != null) {
       kPrint("Check Setup Interact Message: ${initializeMessage.notification}");
      // LocalNotificationService.handleForegroundNotification(initializeMessage);
+      LocalNotificationService.handleForegroundNotification(initializeMessage);
     }
 
     FirebaseMessaging.onMessageOpenedApp.listen(
       (message) {
         kPrint("Check Setup onMessageOpenedApp Message: ${message.notification}");
         //LocalNotificationService.handleForegroundNotification(message);
+        LocalNotificationService.handleForegroundNotification(message);
       },
     );
   }
 
+
+
+
   static Future<void> setForegroundIosMessageOptions() async {
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       alert: true,
       badge: true,
       sound: true,
     );
   }
+
+
 
   ///  Permission method
   static void requestNotificationPermission() async {

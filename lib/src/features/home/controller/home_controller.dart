@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:get/get.dart';
 import 'package:push_notification_check/src/core/helper/helper_method.dart';
 import 'package:push_notification_check/src/core/service/push_notification_service.dart';
@@ -11,11 +12,19 @@ class HomeController extends GetxController{
   RxString token="".obs;
 
   @override
-  void onInit() {
+  void onInit() async{
     super.onInit();
      getDeviceToken();
     PushNotificationService.requestNotificationPermission();
     getAccessToken();
+
+    PushNotificationService.requestNotificationPermission();
+
+    if (Platform.isIOS) {
+      await PushNotificationService.setForegroundIosMessageOptions();
+    }
+    await PushNotificationService.setupInteractMessage();
+    PushNotificationService.firebaseInitNotification();
 
   }
 

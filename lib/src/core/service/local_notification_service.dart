@@ -9,7 +9,7 @@ class LocalNotificationService {
   static  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
  static void initializeLocalNotifications() {
-    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher',);
+    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
     const DarwinInitializationSettings initializationSettingsIos=DarwinInitializationSettings(
         defaultPresentAlert: true,
         defaultPresentBadge: true,
@@ -42,8 +42,8 @@ class LocalNotificationService {
 
     const DarwinNotificationDetails iosDetails=DarwinNotificationDetails(
       presentSound: true,
-
     );
+
     const NotificationDetails platformDetails = NotificationDetails(android: androidDetails,iOS:iosDetails,);
     await flutterLocalNotificationsPlugin.show(
       0,

@@ -12,13 +12,14 @@ import 'package:push_notification_check/src/features/home/view/pages/home_page.d
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+       await Firebase.initializeApp();
   if (kDebugMode) {
     print("Handling a background message: ${message.messageId}");
     print('Message data: ${message.data}');
     print('Message notification: ${message.notification?.title}');
     print('Message notification: ${message.notification?.body}');
   }
-  LocalNotificationService.showNotification(message.notification!);
+  //LocalNotificationService.showNotification(message.notification!);
 }
 
 
@@ -37,16 +38,6 @@ void main() async {
   await Firebase.initializeApp();
 
   LocalNotificationService.initializeLocalNotifications();
-
-  PushNotificationService.requestNotificationPermission();
-
-  if (Platform.isIOS) {
-    await PushNotificationService.setForegroundIosMessageOptions();
-  }
-
-  await PushNotificationService.setupInteractMessage();
-
-   PushNotificationService.firebaseInitNotification();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   runApp(const MyApp());
