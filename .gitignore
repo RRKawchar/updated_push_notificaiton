@@ -42,4 +42,4 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /assets/service/
-lib/src/core/utils/private_key.dart
+lib/src/core/utils/private_keys.dart
