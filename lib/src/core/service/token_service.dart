@@ -2,7 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:googleapis/servicecontrol/v1.dart' as servicecontrol;
-import 'package:push_notification_check/src/core/utils/private_key.dart';
+import 'package:push_notification_check/src/core/utils/private_keys.dart';
 
 
 class TokenService{
