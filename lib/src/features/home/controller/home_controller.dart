@@ -15,9 +15,7 @@ class HomeController extends GetxController{
   void onInit() async{
     super.onInit();
      getDeviceToken();
-    PushNotificationService.requestNotificationPermission();
-    getAccessToken();
-
+     getAccessToken();
     PushNotificationService.requestNotificationPermission();
 
     if (Platform.isIOS) {
@@ -51,7 +49,11 @@ class HomeController extends GetxController{
           "title": "FCM Message"
         },
         "data": {
-          "story_id": "story_12345"
+          "screenId": "story_12345",
+          "name": "Riyazur Rohman Kawchar",
+          "phone": "01888610543",
+          "about": "Software Engineer",
+          "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjIxYgirGsehVewxjdCfN7-d1M05HyK5uArRKC4Df4QPfi1nWTLCvYrijowA&s"
         }
       }
     };

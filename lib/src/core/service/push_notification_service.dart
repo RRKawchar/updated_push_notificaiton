@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:push_notification_check/src/core/helper/helper_method.dart';
 import 'package:push_notification_check/src/core/service/local_notification_service.dart';
@@ -17,8 +16,6 @@ class PushNotificationService {
           kPrint('Message also contained a notification: ${message.notification}');
 
           /// This showNotification Method is very important to show notification...
-
-          // LocalNotificationService.showNotification(message.notification!);
             LocalNotificationService.handleForegroundNotification(message);
         }
       },
@@ -35,15 +32,15 @@ class PushNotificationService {
 
     if (initializeMessage != null) {
       kPrint("Check Setup Interact Message: ${initializeMessage.notification}");
-     // LocalNotificationService.handleForegroundNotification(initializeMessage);
-      LocalNotificationService.handleForegroundNotification(initializeMessage);
+      String payload = jsonEncode(initializeMessage.data);
+      LocalNotificationService.handleNavigationMessage(payload);
     }
 
     FirebaseMessaging.onMessageOpenedApp.listen(
       (message) {
         kPrint("Check Setup onMessageOpenedApp Message: ${message.notification}");
-        //LocalNotificationService.handleForegroundNotification(message);
-        LocalNotificationService.handleForegroundNotification(message);
+        String payload = jsonEncode(message.data);
+        LocalNotificationService.handleNavigationMessage(payload);
       },
     );
   }

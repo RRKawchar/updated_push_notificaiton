@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -11,7 +12,7 @@ import 'package:push_notification_check/src/features/home/view/pages/home_page.d
 
 
 @pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
        await Firebase.initializeApp();
   if (kDebugMode) {
     print("Handling a background message: ${message.messageId}");
@@ -19,6 +20,9 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     print('Message notification: ${message.notification?.title}');
     print('Message notification: ${message.notification?.body}');
   }
+
+       String payload = jsonEncode(message.data);
+       LocalNotificationService.handleNavigationMessage(payload);
   //LocalNotificationService.showNotification(message.notification!);
 }
 
