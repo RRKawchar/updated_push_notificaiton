@@ -6,24 +6,27 @@ import 'package:push_notification_check/src/core/service/local_notification_serv
 class PushNotificationService {
   static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
 
+  /// Firebase Init Notification
+  /// This method work when app will have foreground or will have open
   static void firebaseInitNotification() {
     FirebaseMessaging.onMessage.listen(
       (RemoteMessage message) {
         kPrint('Got a message whilst in the foreground!');
         kPrint('Message data: ${message.data}');
-
-        if (message.notification != null) {
-          kPrint('Message also contained a notification: ${message.notification}');
-
-          /// This showNotification Method is very important to show notification...
-            LocalNotificationService.handleForegroundNotification(message);
-        }
+        LocalNotificationService.handleForegroundNotification(message);
+        // if (message.notification != null) {
+        //   kPrint('Message also contained a notification: ${message.notification}');
+        //
+        //   /// This showNotification Method is very important to show notification when app will have open
+        //     LocalNotificationService.handleForegroundNotification(message);
+        // }
       },
     );
   }
 
 
-
+/// set up Interact Message
+  /// This method work when app is opened via a click notification
   static Future<void> setupInteractMessage() async {
     await FirebaseMessaging.instance.setAutoInitEnabled(true);
 
@@ -31,14 +34,18 @@ class PushNotificationService {
         await FirebaseMessaging.instance.getInitialMessage();
 
     if (initializeMessage != null) {
-      kPrint("Check Setup Interact Message: ${initializeMessage.notification}");
-      String payload = jsonEncode(initializeMessage.data);
+      LocalNotificationService.handleForegroundNotification(initializeMessage);
+
+      kPrint("Check Setup Interact Message: ${initializeMessage.data}");
+      // LocalNotificationService.handleForegroundNotification(initializeMessage);
+       String payload = jsonEncode(initializeMessage.data);
       LocalNotificationService.handleNavigationMessage(payload);
     }
 
     FirebaseMessaging.onMessageOpenedApp.listen(
       (message) {
-        kPrint("Check Setup onMessageOpenedApp Message: ${message.notification}");
+        print("Check Setup onMessageOpenedApp Message: ${message.data}");
+        LocalNotificationService.handleForegroundNotification(message);
         String payload = jsonEncode(message.data);
         LocalNotificationService.handleNavigationMessage(payload);
       },
@@ -47,7 +54,9 @@ class PushNotificationService {
 
 
 
-
+  /// This method is necessary for iOS because, by default,
+  /// notifications are not shown in the foreground.
+  /// This ensures that the user still receives visual or audible cues even if the app is open.
   static Future<void> setForegroundIosMessageOptions() async {
     await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
       alert: true,
@@ -74,7 +83,7 @@ class PushNotificationService {
       kPrint("user notification granted");
     } else if (settings.authorizationStatus ==
         AuthorizationStatus.provisional) {
-      kPrint("User granted provisional permission");
+      kPrint("User granted provisional permission: temporary permission");
     } else {
       kPrint("User denied permission");
     }

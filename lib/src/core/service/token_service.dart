@@ -19,7 +19,6 @@ class TokenService{
       scopes,
     );
 
-
     auth.AccessCredentials credentials = await auth.obtainAccessCredentialsViaServiceAccount(
       auth.ServiceAccountCredentials.fromJson(serviceAccountJson),
       scopes,
@@ -27,8 +26,6 @@ class TokenService{
     );
 
     client.close();
-
-
     return credentials.accessToken.data;
   }
 

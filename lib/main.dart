@@ -5,12 +5,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:push_notification_check/src/core/di/app_bindings.dart';
+import 'package:push_notification_check/src/core/routes/app_routes.dart';
 import 'package:push_notification_check/src/core/service/local_notification_service.dart';
-import 'package:push_notification_check/src/core/service/push_notification_service.dart';
-import 'package:push_notification_check/src/features/home/view/pages/home_page.dart';
 
 
-
+/// Notification background handler
 @pragma('vm:entry-point')
 Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
        await Firebase.initializeApp();
@@ -20,10 +20,9 @@ Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     print('Message notification: ${message.notification?.title}');
     print('Message notification: ${message.notification?.body}');
   }
-
+       LocalNotificationService.handleForegroundNotification(message);
        String payload = jsonEncode(message.data);
        LocalNotificationService.handleNavigationMessage(payload);
-  //LocalNotificationService.showNotification(message.notification!);
 }
 
 
@@ -59,7 +58,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: HomePage()
+       initialRoute: AppRoutes.homePage,
+       getPages: AppRoutes.routes,
+       initialBinding: AppBindings(),
+      //home: HomePage()
     );
   }
 }

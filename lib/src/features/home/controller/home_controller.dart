@@ -45,8 +45,8 @@ class HomeController extends GetxController{
       "message": {
         "token": token.value,
         "notification": {
-          "body": "This is an FCM notification message!",
-          "title": "FCM Message"
+          "title": "FCM Message",
+          "body": "This is an FCM notification message!"
         },
         "data": {
           "screenId": "story_12345",

@@ -1,29 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:push_notification_check/src/features/home/controller/home_controller.dart';
+import 'package:push_notification_check/src/features/home/view/widgets/send_button.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-
-    HomeController homeController = Get.put(HomeController());
     return Scaffold(
       appBar: AppBar(title: const Text("Home"),),
-      body: Column(
+      body: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(onPressed: (){
-
-
-                 homeController.sendNotification();
-
-
-              }, child:const Text("Send Notification")),
+             SendButton()
             ],
           )
         ],
