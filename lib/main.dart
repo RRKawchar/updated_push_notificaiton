@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:push_notification_check/src/core/di/app_bindings.dart';
+import 'package:push_notification_check/src/core/helper/helper_method.dart';
 import 'package:push_notification_check/src/core/routes/app_routes.dart';
 import 'package:push_notification_check/src/core/service/local_notification_service.dart';
 
@@ -13,16 +14,17 @@ import 'package:push_notification_check/src/core/service/local_notification_serv
 /// Notification background handler
 @pragma('vm:entry-point')
 Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-       await Firebase.initializeApp();
-  if (kDebugMode) {
-    print("Handling a background message: ${message.messageId}");
-    print('Message data: ${message.data}');
-    print('Message notification: ${message.notification?.title}');
-    print('Message notification: ${message.notification?.body}');
+  // Initialize any services you may need
+  kPrint("Handling a background message: ${message.messageId}");
+
+  // Handle the data message here
+  LocalNotificationService.handleForegroundNotification(message);
+
+  // Handle navigation or deep linking from the data payload
+  if (message.data.isNotEmpty) {
+    String payload = jsonEncode(message.data);
+    LocalNotificationService.handleNavigationMessage(payload);
   }
-       LocalNotificationService.handleForegroundNotification(message);
-       String payload = jsonEncode(message.data);
-       LocalNotificationService.handleNavigationMessage(payload);
 }
 
 
